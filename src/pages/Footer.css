@@ -1,0 +1,44 @@
+/* Footer container */
+.footer {
+  background: linear-gradient(90deg, #F1FAEE 0%, #A8DADC 100%);
+  color: #1D3557;
+  padding: 30px;
+  text-align: center;
+  margin-top: 50px;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+}
+
+/* Footer heading/logo */
+.footer h3 {
+  font-family: 'Poppins', sans-serif;
+  margin-bottom: 10px;
+  font-size: 22px;
+}
+
+/* Footer description */
+.footer p {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  margin: 5px 0;
+  line-height: 1.5;
+}
+
+/* Social links container */
+.footer .social-links {
+  margin-top: 15px;
+}
+
+/* Social links */
+.footer .social-links a {
+  margin: 0 10px;
+  color: #457B9D; /* Forest Green */
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s, transform 0.2s;
+}
+
+/* Social links hover */
+.footer .social-links a:hover {
+  color: #F4A261; /* Sunrise Orange */
+  transform: translateY(-2px);
+}
