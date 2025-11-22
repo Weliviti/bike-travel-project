@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Navbar from "./pages/Navbar";
-
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Bikes from "./pages/Bikes";
 import Travelled from "./pages/Travelled";
@@ -19,7 +19,10 @@ function App() {
         <Route path="/map" element={<MapView />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        
       </Routes>
+      <Footer />
+
     </BrowserRouter>
   );
 }
