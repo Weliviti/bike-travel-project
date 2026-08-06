@@ -95,6 +95,71 @@ h1 {
   text-wrap: pretty;
 }
 
+/* ---------- calendar ---------- */
+.calendar {
+  background: white;
+  border-radius: 20px;
+  padding: 18px 16px;
+  max-width: 340px;
+  margin: 0 auto 30px;
+  box-shadow: 0 6px 24px rgba(210, 63, 109, 0.15);
+}
+
+.cal-title {
+  font-family: "Caveat", cursive;
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: #e75480;
+  margin-bottom: 10px;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.cal-dow {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #c9a3b4;
+  padding: 4px 0;
+}
+
+.cal-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #b8a0ab;
+  background: transparent;
+  border: none;
+  cursor: default;
+}
+
+.cal-day.available {
+  color: #e75480;
+  border: 2px solid #e75480;
+  background: #fff5f8;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.cal-day.available:hover {
+  transform: scale(1.1);
+}
+
+.cal-day.selected {
+  background: #e75480;
+  color: white;
+  border-color: #e75480;
+}
+
 /* ---------- buttons ---------- */
 .buttons {
   display: flex;
