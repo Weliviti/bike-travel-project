@@ -32,12 +32,12 @@ body {
   position: absolute;
   bottom: -40px;
   opacity: 0.18;
-  animation: float-up linear infinite;
+  animation: float-up 8s linear infinite;
 }
 
 @keyframes float-up {
-  from { transform: translateY(0); }
-  to   { transform: translateY(-110vh); }
+  from { transform: translateY(0) rotate(0deg); }
+  to   { transform: translateY(-110vh) rotate(25deg); }
 }
 
 /* ---------- main content ---------- */

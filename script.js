@@ -14,8 +14,8 @@ function addBgHearts() {
     heart.style.left = Math.random() * 100 + "%";
     heart.style.width = 14 + Math.random() * 30 + "px";
     heart.style.height = 14 + Math.random() * 30 + "px";
-    heart.style.animationDuration = 9 + Math.random() * 12 + "s";
-    heart.style.animationDelay = -Math.random() * 20 + "s";
+    heart.style.animationDuration = 5 + Math.random() * 7 + "s";
+    heart.style.animationDelay = -Math.random() * 15 + "s";
     heart.innerHTML = HEART;
     bgHearts.appendChild(heart);
   }
