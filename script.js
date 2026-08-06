@@ -73,6 +73,57 @@ window.onresize = function () {
   }
 };
 
+/* ---------- calendar ---------- */
+var YEAR = 2026;              /* August 2026 */
+var MONTH = 7;                /* 0 = January, so 7 = August */
+var AVAILABLE_DAYS = [8, 9, 10, 11];
+var selectedDay = null;
+
+function buildCalendar() {
+  var grid = document.getElementById("calGrid");
+  var dow = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+  var html = "";
+  for (var d = 0; d < 7; d++) {
+    html += '<span class="cal-dow">' + dow[d] + "</span>";
+  }
+
+  var first = new Date(YEAR, MONTH, 1).getDay();     /* empty cells before day 1 */
+  for (var i = 0; i < first; i++) {
+    html += '<span></span>';
+  }
+
+  var total = new Date(YEAR, MONTH + 1, 0).getDate(); /* how many days in the month */
+  for (var day = 1; day <= total; day++) {
+    if (AVAILABLE_DAYS.indexOf(day) !== -1) {
+      html += '<button type="button" class="cal-day available" data-day="' + day + '">' + day + "</button>";
+    } else {
+      html += '<span class="cal-day">' + day + "</span>";
+    }
+  }
+  grid.innerHTML = html;
+
+  var cells = grid.querySelectorAll(".cal-day.available");
+  for (var c = 0; c < cells.length; c++) {
+    cells[c].onclick = function () { selectDay(this); };
+  }
+}
+
+function selectDay(cell) {
+  var old = document.querySelector(".cal-day.selected");
+  if (old) old.classList.remove("selected");
+  cell.classList.add("selected");
+  selectedDay = parseInt(cell.getAttribute("data-day"), 10);
+}
+
+function daySuffix(d) {
+  if (d === 11 || d === 12 || d === 13) return "th";
+  var last = d % 10;
+  if (last === 1) return "st";
+  if (last === 2) return "nd";
+  if (last === 3) return "rd";
+  return "th";
+}
+
 /* ---------- hearts burst out when Yes is pressed ---------- */
 function removeLater(heart) {
   setTimeout(function () { heart.remove(); }, 1500);
@@ -99,4 +150,10 @@ yesBtn.onclick = function () {
   burst();
   askScreen.className = "hidden";
   celebrate.className = "celebration show";
+  if (selectedDay) {
+    var sub = celebrate.querySelector(".sub");
+    sub.textContent = "See you on August " + selectedDay + daySuffix(selectedDay) + "!";
+  }
 };
+
+buildCalendar();
