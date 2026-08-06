@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Will you go on a date with me?</title>
+<style>
+  :root {
+    --bg-1: #fff7f9;
+    --bg-2: #ffe4ee;
+    --ink: #4a2b3a;
+    --muted: #8a6277;
+    --rose: #e75480;
+    --rose-deep: #d23f6d;
+    --white: #ffffff;
+    --shadow: 0 10px 30px rgba(231, 84, 128, 0.25);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body { height: 100%; }
+
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 100%);
+    color: var(--ink);
+    min-height: 100dvh;
+    overflow-x: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px;
+    position: relative;
+  }
+
+  /* ---------- floating background hearts ---------- */
+  .bg-hearts { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .bg-heart {
+    position: absolute;
+    bottom: -40px;
+    animation: floatUp linear infinite;
+    opacity: 0.18;
+  }
+  @keyframes floatUp {
+    from { transform: translateY(0) rotate(0deg); }
+    to   { transform: translateY(-110vh) rotate(30deg); }
+  }
+
+  .content { position: relative; z-index: 1; max-width: 560px; width: 100%; }
+
+  /* ---------- beating heart ---------- */
+  .big-heart {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 20px;
+    animation: beat 1.1s ease-in-out infinite;
+    filter: drop-shadow(0 6px 14px rgba(231, 84, 128, 0.35));
+  }
+  @keyframes beat {
+    0%, 100% { transform: scale(1); }
+    12%      { transform: scale(1.18); }
+    24%      { transform: scale(1); }
+    36%      { transform: scale(1.12); }
+    48%      { transform: scale(1); }
+  }
+
+  h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: clamp(1.9rem, 6vw, 2.9rem);
+    line-height: 1.2;
+    margin-bottom: 14px;
+    text-wrap: pretty;
+  }
+
+  .sub {
+    color: var(--muted);
+    font-size: clamp(1rem, 3.5vw, 1.15rem);
+    line-height: 1.6;
+    margin-bottom: 40px;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ---------- buttons ---------- */
+  .buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: inherit;
+    font-size: 1.1rem;
+    font-weight: 600;
+    min-height: 56px;
+    min-width: 140px;
+    padding: 14px 34px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn:focus-visible { outline: 3px solid var(--rose-deep); outline-offset: 3px; }
+
+  .yes {
+    background: linear-gradient(135deg, var(--rose), var(--rose-deep));
+    color: var(--white);
+    box-shadow: var(--shadow);
+  }
+  .yes:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 14px 34px rgba(231, 84, 128, 0.4);
+  }
+  .yes:active { transform: scale(0.97); }
+
+  .no {
+    background: var(--white);
+    color: var(--rose);
+    border: 2px solid var(--rose);
+    box-shadow: 0 6px 18px rgba(231, 84, 128, 0.12);
+  }
+  .no:hover { background: #fff0f5; transform: translateY(-2px); }
+
+  /* when the No button starts dodging it becomes floating */
+  .no.dodging {
+    position: fixed;
+    z-index: 50;
+    transition: left 0.25s cubic-bezier(0.34, 1.3, 0.64, 1), top 0.25s cubic-bezier(0.34, 1.3, 0.64, 1);
+    box-shadow: 0 10px 26px rgba(231, 84, 128, 0.28);
+  }
+
+  /* ---------- celebration screen ---------- */
+  .celebration { display: none; }
+  .celebration.show {
+    display: block;
+    animation: popIn 0.5s cubic-bezier(0.34, 1.4, 0.64, 1);
+  }
+  @keyframes popIn {
+    from { transform: scale(0.7); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+
+  .celebration .big-heart { animation-duration: 0.8s; }
+
+  .celebration h1 { margin-bottom: 10px; }
+  .celebration .sub { margin-bottom: 0; }
+
+  .kiss {
+    display: inline-block;
+    font-size: 2.4rem;
+    margin-top: 24px;
+    animation: bounce 1.2s ease-in-out infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-14px); }
+  }
+
+  /* ---------- burst hearts (confetti) ---------- */
+  .burst-heart {
+    position: fixed;
+    z-index: 40;
+    pointer-events: none;
+    animation: burst 1.3s ease-out forwards;
+  }
+  @keyframes burst {
+    0%   { transform: translate(0, 0) scale(0.4); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(1.1) rotate(var(--rot)); opacity: 0; }
+  }
+
+  .hidden { display: none !important; }
+
+  /* ---------- reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    .bg-heart, .big-heart, .kiss { animation: none !important; }
+    .btn, .no.dodging { transition: none !important; }
+    .celebration.show { animation: none !important; }
+  }
+
+  /* ---------- small screens ---------- */
+  @media (max-width: 420px) {
+    .btn { min-width: 130px; padding: 14px 24px; font-size: 1.05rem; }
+    .buttons { gap: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-hearts" id="bgHearts" aria-hidden="true"></div>
+
+<main class="content">
+
+  <!-- ASK SCREEN -->
+  <section id="askScreen">
+    <svg class="big-heart" viewBox="0 0 32 29" fill="#e75480" aria-hidden="true">
+      <path d="M23.6 0c-3.4 0-6.3 2.7-7.6 5.6C14.7 2.7 11.8 0 8.4 0 3.8 0 0 3.8 0 8.4c0 9.4 9.5 11.9 16 20.4 6.5-8.5 16-11 16-20.4C32 3.8 28.2 0 23.6 0z"/>
+    </svg>
+
+    <h1>Will you go on a date with me?</h1>
+    <p class="sub">I've been thinking about this for a while now, and my heart won't shut up about it. So here goes… pick your answer below.</p>
+
+    <div class="buttons">
+      <button class="btn yes" id="yesBtn" type="button">Yes!</button>
+      <button class="btn no" id="noBtn" type="button">No</button>
+    </div>
+  </section>
+
+  <!-- CELEBRATION SCREEN -->
+  <section class="celebration" id="celebrateScreen" aria-live="polite">
+    <svg class="big-heart" viewBox="0 0 32 29" fill="#e75480" aria-hidden="true">
+      <path d="M23.6 0c-3.4 0-6.3 2.7-7.6 5.6C14.7 2.7 11.8 0 8.4 0 3.8 0 0 3.8 0 8.4c0 9.4 9.5 11.9 16 20.4 6.5-8.5 16-11 16-20.4C32 3.8 28.2 0 23.6 0z"/>
+    </svg>
+    <h1>Yay! It's a date!</h1>
+    <p class="sub">I knew you'd say yes. I'll pick you up with a smile on my face.</p>
+    <span class="kiss" aria-hidden="true">💌</span>
+  </section>
+
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  var bgHearts = document.getElementById("bgHearts");
+  var askScreen = document.getElementById("askScreen");
+  var celebrate = document.getElementById("celebrateScreen");
+  var yesBtn = document.getElementById("yesBtn");
+  var noBtn = document.getElementById("noBtn");
+
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- floating background hearts ---------- */
+  var HEART_SVG = '<svg width="28" height="26" viewBox="0 0 32 29" fill="#e75480"><path d="M23.6 0c-3.4 0-6.3 2.7-7.6 5.6C14.7 2.7 11.8 0 8.4 0 3.8 0 0 3.8 0 8.4c0 9.4 9.5 11.9 16 20.4 6.5-8.5 16-11 16-20.4C32 3.8 28.2 0 23.6 0z"/></svg>';
+
+  function spawnBgHearts() {
+    for (var i = 0; i < 12; i++) {
+      var el = document.createElement("div");
+      el.className = "bg-heart";
+      var size = 14 + Math.random() * 30;
+      el.style.left = Math.random() * 100 + "%";
+      el.style.width = size + "px";
+      el.style.height = size + "px";
+      el.innerHTML = HEART_SVG;
+      if (reduced) {
+        el.style.bottom = "auto";
+        el.style.top = Math.random() * 100 + "%";
+      } else {
+        el.style.animationDuration = 9 + Math.random() * 12 + "s";
+        el.style.animationDelay = -Math.random() * 20 + "s";
+      }
+      bgHearts.appendChild(el);
+    }
+  }
+  spawnBgHearts();
+
+  /* ---------- No button dodging ---------- */
+  var noLabels = ["No", "Are you sure?", "Really sure?", "Think again…", "Last chance!", "No isn't an option 😏", "The No button is shy", "Fine, it gives up"];
+  var dodgeCount = 0;
+  var dodging = false;
+
+  function dodge() {
+    if (dodging) return;
+    dodging = true;
+    noBtn.classList.add("dodging");
+
+    var pad = 16;
+    var btnW = noBtn.offsetWidth;
+    var btnH = noBtn.offsetHeight;
+    var maxX = window.innerWidth - btnW - pad;
+    var maxY = window.innerHeight - btnH - pad;
+    var x = Math.max(pad, Math.min(maxX, Math.random() * maxX));
+    var y = Math.max(pad, Math.min(maxY, Math.random() * maxY));
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+
+    dodgeCount++;
+    if (dodgeCount <= noLabels.length) {
+      noBtn.textContent = noLabels[Math.min(dodgeCount, noLabels.length) - 1];
+    }
+    if (dodgeCount >= 6) {
+      noBtn.style.transform = "scale(" + Math.max(0.55, 1 - dodgeCount * 0.07) + ")";
+    }
+
+    /* after it has dodged a few times, let it dodge again on later presses */
+    window.setTimeout(function () { dodging = false; }, 260);
+  }
+
+  noBtn.addEventListener("click", function (e) { e.preventDefault(); dodge(); });
+  noBtn.addEventListener("mouseenter", function () { if (!reduced) dodge(); });
+  noBtn.addEventListener("touchstart", function (e) { e.preventDefault(); dodge(); }, { passive: false });
+  window.addEventListener("resize", function () {
+    if (dodging) {
+      var pad = 16;
+      var btnW = noBtn.offsetWidth;
+      var btnH = noBtn.offsetHeight;
+      var x = Math.max(pad, Math.min(window.innerWidth - btnW - pad, parseFloat(noBtn.style.left) || 0));
+      var y = Math.max(pad, Math.min(window.innerHeight - btnH - pad, parseFloat(noBtn.style.top) || 0));
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    }
+  });
+
+  /* ---------- Yes button celebration ---------- */
+  function burstHearts() {
+    for (var i = 0; i < 32; i++) {
+      var el = document.createElement("div");
+      el.className = "burst-heart";
+      el.innerHTML = HEART_SVG;
+      var size = 14 + Math.random() * 22;
+      el.style.width = size + "px";
+      el.style.height = size + "px";
+      el.style.left = window.innerWidth / 2 + "px";
+      el.style.top = window.innerHeight / 2 + "px";
+      el.style.setProperty("--dx", (Math.random() * 2 - 1) * (120 + Math.random() * 260) + "px");
+      el.style.setProperty("--dy", (Math.random() * 2 - 1) * (120 + Math.random() * 260) + "px");
+      el.style.setProperty("--rot", (Math.random() * 2 - 1) * 220 + "deg");
+      if (reduced) {
+        el.style.animation = "none";
+        el.style.opacity = "0";
+      }
+      document.body.appendChild(el);
+      (function (node) {
+        window.setTimeout(function () { node.remove(); }, 1500);
+      })(el);
+    }
+  }
+
+  function celebrateNow() {
+    burstHearts();
+    askScreen.classList.add("hidden");
+    celebrate.classList.add("show");
+  }
+
+  yesBtn.addEventListener("click", celebrateNow);
+
+  /* tiny screen-height safe check for the No button */
+  document.addEventListener("touchmove", function (e) {
+    if (e.target === noBtn) e.preventDefault();
+  }, { passive: false });
+})();
+</script>
+</body>
+</html>
