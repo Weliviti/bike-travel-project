@@ -23,12 +23,25 @@ function addBgHearts() {
 addBgHearts();
 
 /* ---------- the No button runs away ---------- */
-var labels = ["No", "Are you sure?", "Really sure?", "Think again…", "Last chance!", "No isn't an option 😏", "The No button is shy", "Fine, it gives up"];
-var count = 0;
+var labels = ["No", "Are you sure?", "Really sure?", "Last chance!"];
+var count = 0;      /* how many times it has dodged */
 var moving = false;
+var gaveUp = false; /* after 4 dodges it stays still */
 
 function moveNo() {
-  if (moving) return;
+  if (gaveUp || moving) return;
+
+  /* 5th try: it gives up and goes back to its spot */
+  if (count >= 4) {
+    gaveUp = true;
+    noBtn.className = "btn no";
+    noBtn.style.left = "";
+    noBtn.style.top = "";
+    noBtn.style.transform = "";
+    noBtn.textContent = "Fine, I give up 😌";
+    return;
+  }
+
   moving = true;
   noBtn.className = "btn no dodging";
 
@@ -49,12 +62,7 @@ function moveNo() {
   noBtn.style.top = y + "px";
 
   count++;
-  if (count <= labels.length) {
-    noBtn.textContent = labels[count - 1];
-  }
-  if (count >= 6) {
-    noBtn.style.transform = "scale(" + Math.max(0.55, 1 - count * 0.07) + ")";
-  }
+  noBtn.textContent = labels[count - 1];
 
   setTimeout(function () { moving = false; }, 260);
 }
